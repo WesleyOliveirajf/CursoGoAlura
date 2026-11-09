@@ -13,6 +13,7 @@ const delay = 5
 func main() {
 
 	exibeIntroducao()
+	leSitesDoArquivos()
 
 	for {
 
@@ -59,7 +60,9 @@ func leComando() int {
 
 func iniciarMonitoramento() {
 	fmt.Println("Monitorando...")
-	sites := []string{"https://torp.ind.br/", "https://www.alura.com.br/", "https://ge.globo.com/"}
+	//sites := []string{"https://torp.ind.br/", "https://www.alura.com.br/", "https://ge.globo.com/"}
+
+	sites := leSitesDoArquivos()
 
 	for i := 0; i < monitoramento; i++ {
 		for i, site := range sites {
@@ -75,11 +78,27 @@ func iniciarMonitoramento() {
 }
 
 func testaSite(site string) {
-	resp, _ := http.Get(site)
-	//fmt.Println(resp)
+	resp, err := http.Get(site)
+
+    if err != nil{
+        fmt.Println("Ocorreu um erro", err)
+    }
+
 	if resp.StatusCode == 200 {
 		fmt.Println("Site: ", site, " foi carregado com sucesso")
 	} else {
 		fmt.Println("Site: ", site, " Site com erro:", resp.StatusCode)
 	}
+}
+
+func leSitesDoArquivos() []string {
+
+	var sites []string
+	arquivo, err := os.Open("site.txt")
+	if err != nil {
+		fmt.Println("Ocorreu um erro", err)
+
+	}
+	fmt.Println(arquivo)
+	return sites
 }
