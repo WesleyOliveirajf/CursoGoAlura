@@ -4,18 +4,19 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"reflect"
+	"time"
 )
+
+const monitoramento = 2
+const delay = 5
 
 func main() {
 
-	//exibeIntroducao()
-
-	exibirNomes()
+	exibeIntroducao()
 
 	for {
 
-		//exibeMenu()
+		exibeMenu()
 		comando := leComando()
 
 		switch comando {
@@ -51,19 +52,29 @@ func leComando() int {
 	var comandoLido int
 	fmt.Scan(&comandoLido)
 	fmt.Println("O comando escolhido foi", comandoLido)
+	fmt.Println("")
 
 	return comandoLido
 }
 
 func iniciarMonitoramento() {
 	fmt.Println("Monitorando...")
-	var sites [4]string
-	sites[0] = "https://torp.ind.br/"
-	sites[1] = "https://www.alura.com.br/"
-	sites[2] = "https://ge.globo.com/"
-	site := "https://torp.ind.br/"
-	fmt.Println("Site: ", sites, " foi carregado com sucesso")
+	sites := []string{"https://torp.ind.br/", "https://www.alura.com.br/", "https://ge.globo.com/"}
 
+	for i := 0; i < monitoramento; i++ {
+		for i, site := range sites {
+			fmt.Println("Testando site", i, ": ", site)
+			testaSite(site)
+		}
+		time.Sleep(delay * time.Second)
+		fmt.Println("")
+	}
+
+	fmt.Println("")
+
+}
+
+func testaSite(site string) {
 	resp, _ := http.Get(site)
 	//fmt.Println(resp)
 	if resp.StatusCode == 200 {
@@ -71,12 +82,4 @@ func iniciarMonitoramento() {
 	} else {
 		fmt.Println("Site: ", site, " Site com erro:", resp.StatusCode)
 	}
-}
-
-func exibirNomes() {
-	nomes := []string{"Wesley", "Daniel", "Maria"}
-	fmt.Println(nomes)
-	fmt.Println(reflect.TypeOf(nomes))
-	fmt.Println(len(nomes))
-
 }
