@@ -96,7 +96,7 @@ func leSitesDoArquivos() []string {
 	var sites []string
 	//arquivo, err := os.Open("site.txt")
 
-	arquivo, err := os.ReadFile("sites.txt")
+	arquivo, err := os.ReadFile("site.txt")
 
 	if err != nil {
 		fmt.Println("Ocorreu um erro", err)
